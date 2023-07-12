@@ -1,0 +1,42 @@
+version: 0.2
+
+env:
+  shell:
+    - /bin/bash
+    - -e
+    - -o pipefail
+  variables:
+    DIRECTORY_TO_BUILD="dir1"
+phases:
+  install:
+    commands:
+      - echo Fetching Git metadata...
+      - CHANGED_FILES=$(git diff-tree --no-commit-id --name-only -r $CODEBUILD_RESOLVED_SOURCE_VERSION)
+      - echo "Files changed in this commit: $CHANGED_FILES"
+      - |
+        IGNORE_LIST=($(cat build-ignore.txt))
+        for file in $CHANGED_FILES
+        do
+          if [[ ${file} == ${DIRECTORY_TO_BUILD}/* && ! " ${IGNORE_LIST[@]} " =~ " ${file} " ]]; then
+            echo "File ${file} is not in the ignore list and is in the ${DIRECTORY_TO_BUILD}. Proceeding with build..."
+            PROCEED_BUILD="true"
+            break
+          fi
+        done
+        if [[ -z ${PROCEED_BUILD} ]]; then
+          echo "Only ignored files were modified or no changes in ${DIRECTORY_TO_BUILD}. Exiting build..."
+          exit 0
+        fi
+      - apt-get update -y
+  pre_build:
+    commands:
+      - echo Pre_build Phase
+      - npm ci
+      - echo "$(hostname -i) local" >> /etc/hosts
+      - cat /etc/hosts
+  build:
+    commands:
+      - echo Build Phase
+  post_build:
+    commands:
+      - echo Post Build Phase

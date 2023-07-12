@@ -1,6 +1,7 @@
 version: 0.2
 
 env:
+  shell: bash
   variables:
     DIRECTORY_TO_BUILD: "dir1"
 
@@ -9,7 +10,6 @@ phases:
     commands:
       - echo Fetching Git metadata...
       - CHANGED_FILES=$(git diff-tree --no-commit-id --name-only -r $CODEBUILD_RESOLVED_SOURCE_VERSION)
-      - echo "Files changed in this commit: $CHANGED_FILES"
       - |
         IGNORE_LIST=($(cat build-ignore.txt))
         for file in $CHANGED_FILES

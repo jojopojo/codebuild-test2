@@ -11,6 +11,8 @@ phases:
     commands:
       - echo Fetching Git metadata...
       - ls -Al
+      - PROCEED=1
+      - proceed() [[ -v PROCEED ]]
       - CHANGED_FILES=$(git diff-tree --no-commit-id --name-only -r $CODEBUILD_RESOLVED_SOURCE_VERSION)
       - |
         IGNORE_LIST=($(cat build-ignore.txt))
@@ -18,23 +20,23 @@ phases:
         do
           if [[ ${file} == ${DIRECTORY_TO_BUILD}/* && ! " ${IGNORE_LIST[@]} " =~ " ${file} " ]]; then
             echo "File ${file} is not in the ignore list and is in the ${DIRECTORY_TO_BUILD}. Proceeding with build..."
-            PROCEED_BUILD="true"
             break
           fi
         done
         if [[ -z ${PROCEED_BUILD} ]]; then
           echo "Only ignored files were modified or no changes in ${DIRECTORY_TO_BUILD}. Exiting build..."
+          unset PROCEED
           exit 0
         fi
-      - apt-get update -y
+      - proceed && apt-get update -y
   pre_build:
     commands:
-      - echo Pre_build Phase
-      - echo "$(hostname -i) local" >> /etc/hosts
-      - cat /etc/hosts
+      - proceed && echo Pre_build Phase
+      - proceed && echo "$(hostname -i) local" >> /etc/hosts
+      - proceed && cat /etc/hosts
   build:
     commands:
-      - echo Build Phase
+      - proceed && echo Build Phase
   post_build:
     commands:
-      - echo Post Build Phase
+      - proceed && echo Post Build Phase

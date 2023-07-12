@@ -190,6 +190,16 @@ resource "aws_iam_policy" "codepipeline_policy" {
       },
       {
         Action = [
+            "codestar-connections:UseConnection"
+        ],
+        Resource = [
+            "${var.codestar_arn}",
+            "${var.codestar_arn}/*"
+        ],
+        Effect = "Allow"
+      },
+      {
+        Action = [
           "iam:PassRole"
         ],
         Resource = "${aws_iam_role.codebuild_role.arn}",

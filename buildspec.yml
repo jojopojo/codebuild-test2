@@ -1,12 +1,9 @@
 version: 0.2
 
 env:
-  shell:
-    - /bin/bash
-    - -e
-    - -o pipefail
   variables:
     DIRECTORY_TO_BUILD="dir1"
+    
 phases:
   install:
     commands:
@@ -31,7 +28,6 @@ phases:
   pre_build:
     commands:
       - echo Pre_build Phase
-      - npm ci
       - echo "$(hostname -i) local" >> /etc/hosts
       - cat /etc/hosts
   build:

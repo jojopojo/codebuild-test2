@@ -77,6 +77,7 @@ resource "aws_codepipeline" "codepipeline" {
         ConnectionArn = var.codestar_arn
         FullRepositoryId = "jojopojo/codebuild-test2"
         BranchName = "main"
+        OutputArtifactFormat = "CODEBUILD_CLONE_REF"
       }
     }
   }

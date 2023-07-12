@@ -9,6 +9,7 @@ phases:
   install:
     commands:
       - echo Fetching Git metadata...
+      - ls -Al
       - CHANGED_FILES=$(git diff-tree --no-commit-id --name-only -r $CODEBUILD_RESOLVED_SOURCE_VERSION)
       - |
         IGNORE_LIST=($(cat build-ignore.txt))

@@ -2,8 +2,8 @@ version: 0.2
 
 env:
   variables:
-    DIRECTORY_TO_BUILD="dir1"
-    
+    DIRECTORY_TO_BUILD: "dir1"
+
 phases:
   install:
     commands:

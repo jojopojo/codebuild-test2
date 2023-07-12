@@ -1,6 +1,7 @@
 version: 0.2
 
 env:
+  git-credential-helper: yes
   shell: bash
   variables:
     DIRECTORY_TO_BUILD: "dir1"

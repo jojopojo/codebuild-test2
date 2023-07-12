@@ -153,6 +153,16 @@ resource "aws_iam_policy" "codebuild_policy" {
           "${aws_s3_bucket.artifact_bucket.arn}/*"
         ],
         Effect = "Allow"
+      },
+      {
+        Action = [
+            "codestar-connections:*"
+        ],
+        Resource = [
+            "${var.codestar_arn}",
+            "${var.codestar_arn}/*"
+        ],
+        Effect = "Allow"
       }
     ]
   })
@@ -191,7 +201,7 @@ resource "aws_iam_policy" "codepipeline_policy" {
       },
       {
         Action = [
-            "codestar-connections:UseConnection"
+            "codestar-connections:*"
         ],
         Resource = [
             "${var.codestar_arn}",
